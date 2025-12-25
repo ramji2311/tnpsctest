@@ -1,18 +1,14 @@
 import { useState, useCallback } from "react";
-import { getRandomQuestions, Question } from "@/data/questions";
+import { questions as allQuestions, Question } from "@/data/questions";
 import { QuestionCard } from "./QuestionCard";
 import { QuizResults } from "./QuizResults";
-
-const QUESTIONS_PER_QUIZ = 10;
 
 interface QuizProps {
   onHome: () => void;
 }
 
 export function Quiz({ onHome }: QuizProps) {
-  const [questions, setQuestions] = useState<Question[]>(() =>
-    getRandomQuestions(QUESTIONS_PER_QUIZ)
-  );
+  const [questions, setQuestions] = useState<Question[]>(() => [...allQuestions]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
@@ -30,7 +26,7 @@ export function Quiz({ onHome }: QuizProps) {
   }, [currentIndex, questions.length]);
 
   const handleRestart = useCallback(() => {
-    setQuestions(getRandomQuestions(QUESTIONS_PER_QUIZ));
+    setQuestions([...allQuestions]);
     setCurrentIndex(0);
     setScore(0);
     setIsComplete(false);
