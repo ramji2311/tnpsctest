@@ -1,14 +1,19 @@
 import { useState, useCallback } from "react";
-import { questions as allQuestions, Question } from "@/data/questions";
+import { Question } from "@/data/questions";
+import { getQuizById } from "@/data/quizConfig";
 import { QuestionCard } from "./QuestionCard";
 import { QuizResults } from "./QuizResults";
 
 interface QuizProps {
+  quizId: string;
   onHome: () => void;
 }
 
-export function Quiz({ onHome }: QuizProps) {
-  const [questions, setQuestions] = useState<Question[]>(() => [...allQuestions]);
+export function Quiz({ quizId, onHome }: QuizProps) {
+  const quizConfig = getQuizById(quizId);
+  const initialQuestions = quizConfig?.questions || [];
+  
+  const [questions, setQuestions] = useState<Question[]>(() => [...initialQuestions]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
@@ -26,11 +31,19 @@ export function Quiz({ onHome }: QuizProps) {
   }, [currentIndex, questions.length]);
 
   const handleRestart = useCallback(() => {
-    setQuestions([...allQuestions]);
+    setQuestions([...initialQuestions]);
     setCurrentIndex(0);
     setScore(0);
     setIsComplete(false);
-  }, []);
+  }, [initialQuestions]);
+
+  if (!quizConfig || questions.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground">Quiz not found</p>
+      </div>
+    );
+  }
 
   if (isComplete) {
     return (
@@ -39,6 +52,7 @@ export function Quiz({ onHome }: QuizProps) {
         totalQuestions={questions.length}
         onRestart={handleRestart}
         onHome={onHome}
+        quizTitle={quizConfig.title}
       />
     );
   }
@@ -50,6 +64,7 @@ export function Quiz({ onHome }: QuizProps) {
       questionNumber={currentIndex + 1}
       totalQuestions={questions.length}
       onAnswer={handleAnswer}
+      quizTitle={quizConfig.title}
     />
   );
 }
