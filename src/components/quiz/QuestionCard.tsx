@@ -8,6 +8,7 @@ interface QuestionCardProps {
   questionNumber: number;
   totalQuestions: number;
   onAnswer: (isCorrect: boolean) => void;
+  quizTitle?: string;
 }
 
 export function QuestionCard({
@@ -15,6 +16,7 @@ export function QuestionCard({
   questionNumber,
   totalQuestions,
   onAnswer,
+  quizTitle,
 }: QuestionCardProps) {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [hasAnswered, setHasAnswered] = useState(false);
@@ -52,6 +54,15 @@ export function QuestionCard({
 
   return (
     <div className="w-full max-w-2xl mx-auto animate-fade-in">
+      {/* Quiz Title */}
+      {quizTitle && (
+        <div className="text-center mb-6">
+          <span className="text-sm font-medium text-primary bg-primary/10 px-4 py-1 rounded-full">
+            {quizTitle}
+          </span>
+        </div>
+      )}
+
       {/* Progress */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-2">

@@ -7,6 +7,7 @@ interface QuizResultsProps {
   totalQuestions: number;
   onRestart: () => void;
   onHome: () => void;
+  quizTitle?: string;
 }
 
 export function QuizResults({
@@ -14,6 +15,7 @@ export function QuizResults({
   totalQuestions,
   onRestart,
   onHome,
+  quizTitle,
 }: QuizResultsProps) {
   const percentage = Math.round((score / totalQuestions) * 100);
 
@@ -34,6 +36,15 @@ export function QuizResults({
 
   return (
     <div className="w-full max-w-md mx-auto text-center animate-fade-in">
+      {/* Quiz Title */}
+      {quizTitle && (
+        <div className="mb-6">
+          <span className="text-sm font-medium text-primary bg-primary/10 px-4 py-2 rounded-full">
+            {quizTitle}
+          </span>
+        </div>
+      )}
+
       {/* Trophy Icon */}
       <div className="mb-8">
         <div className="w-24 h-24 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
